@@ -3,7 +3,7 @@ import './EventDetails.css'
 import { Modal } from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const EventDetails = ({ role = "admin" }) => {
+const EventDetails = ({ role = "user" }) => {
     const [open, setOpen] = React.useState(false);
     
   const handleOpen = () => setOpen(true);
@@ -68,7 +68,7 @@ const EventDetails = ({ role = "admin" }) => {
              <div>
                 <div>
                     <h4>Registration Link</h4>
-                    <a href={event.link} >{event.link}</a>
+                    <a href={event.link} target='_'>{event.link}</a>
                 </div>
                 <div>
                     <h4>Last Date to apply</h4>

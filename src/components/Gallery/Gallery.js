@@ -3,7 +3,7 @@ import "./Gallery.css";
 import { Modal, Pagination } from "@mui/material";
 import GalleryCard from "./GalleryCard/GalleryCard";
 
-const Gallery = ({ role = "admin" }) => {
+const Gallery = ({ role = "user" }) => {
   const [keyword, setKeyword] = useState("");
   const [page, setPage] = useState(1);
   const handleOpen = () => setOpen(true);

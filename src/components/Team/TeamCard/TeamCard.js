@@ -5,7 +5,7 @@ import facebook from '../../../assets/facebook_blackwhite.png'
 import linkedIn from '../../../assets/linkedin_blackwhite.png'
 import { Modal } from '@mui/material'
 
-const TeamCard = ({ member , role = "admin" }) => {
+const TeamCard = ({ member , role = "user" }) => {
     const [open, setOpen] = useState(false);
     const [name , setName] = useState(member.name);
     const [post , setPost] = useState(member.post);
