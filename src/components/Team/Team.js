@@ -8,7 +8,7 @@ import Select from '@mui/material/Select';
 import Tilt from 'react-parallax-tilt'
 import { Modal } from "@mui/material";
 
-const Team = ({ role = "user"}) => {
+const Team = ({ role = "admin"}) => {
   const [year, setYear] = useState("23");
   const [open, setOpen] = useState(false);
   const [name , setName] = useState();

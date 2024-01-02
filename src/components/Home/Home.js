@@ -20,7 +20,7 @@ const Home = () => {
         },
       };
   return (
-    <section>
+    <section >
     <div className='home'>
         <div className='h-title'><motion.h1 initial={{
                 y: "+100%",

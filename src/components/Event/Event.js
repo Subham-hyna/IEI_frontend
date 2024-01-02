@@ -3,7 +3,7 @@ import './Event.css'
 import EventCard from './EventCard/EventCard'
 import { FormControl, InputLabel, MenuItem, Modal, Pagination, Select } from '@mui/material'
 
-const Event = ({ role = "user"}) => {
+const Event = ({ role = "admin"}) => {
     const [status , setStatus] = useState("ALL");
     const [keyword , setKeyword] = useState("");
     const [page, setPage] = useState(1);

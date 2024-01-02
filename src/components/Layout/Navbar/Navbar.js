@@ -8,7 +8,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import logo from '../../../assets/IEI_logo.svg'
 import Button from '@mui/material/Button';
 
-const Navbar = ({ isAuthenticated = false , name="Subham Dutta" , role="user"}) => {
+const Navbar = ({ isAuthenticated = true , name="Subham Dutta" , role="admin"}) => {
 
     const[mobileMenu, setMobileMenu] = useState(false);
     

@@ -3,7 +3,7 @@ import './EventDetails.css'
 import { Modal } from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const EventDetails = ({ role = "user" }) => {
+const EventDetails = ({ role = "admin" }) => {
     const [open, setOpen] = React.useState(false);
     
   const handleOpen = () => setOpen(true);

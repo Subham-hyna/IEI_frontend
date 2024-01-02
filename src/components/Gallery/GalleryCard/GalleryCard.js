@@ -3,7 +3,7 @@ import './GalleryCard.css'
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Modal } from "@mui/material";
 
-const GalleryCard = ({ activity, role = "useere" }) => {
+const GalleryCard = ({ activity, role = "admin" }) => {
   const [open, setOpen] = React.useState(false);
     
   const handleOpen = () => setOpen(true);
