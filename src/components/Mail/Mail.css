@@ -9,7 +9,7 @@
     padding: 100px;
 }
 
-.mail>div{
+.mail>form{
     width: 500px;
     border-radius: 30px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
@@ -22,19 +22,19 @@
     gap: 30px;
 }
 
-.mail>div>div{
+.mail>form>div{
     display: flex;
     justify-content: center;
     gap: 10px;
     flex-direction: column;
 }
 
-.mail>div>div>label{
+.mail>form>div>label{
     font-size: 14px;
     font-weight: 500; 
 }
 
-.mail>div>div>input{
+.mail>form>div>input{
     background-color: #f4f4f4;
     border: none;
     padding: 10px 15px;
@@ -43,11 +43,11 @@
     outline: none;
 }
 
-.mail>div>div>input:focus{
+.mail>form>div>input:focus{
     border: 2px solid #512da8;
 }
 
-.mail>div>div>textarea{
+.mail>form>div>textarea{
     resize:vertical ;
     height: 150px;
     padding: 10px;
@@ -56,11 +56,11 @@
     background-color: #f4f4f4;
 }
 
-.mail>div>div>textarea:focus{
+.mail>form>div>textarea:focus{
     border: 2px solid #512da8;
 }
 
-.mail>div>div>button{
+.mail>form>div>button{
     background-color: #512da8;
 color: #fff;
 font-size: 12px;
@@ -72,9 +72,12 @@ letter-spacing: 0.5px;
 width: 100%;
 text-transform: uppercase;
 cursor: pointer;
+display: flex;
+justify-content: center;
+align-items: center;
 }
 
-.mail>div>div>button:hover{
+.mail>form>div>button:hover{
     background-color: #2e1669;
 }
 
@@ -82,7 +85,7 @@ cursor: pointer;
     .mail{
         padding: 100px 50px;
     }
-    .mail>div{
+    .mail>form{
         width: 80vw;
     }
 }

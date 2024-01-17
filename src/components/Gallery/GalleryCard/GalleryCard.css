@@ -31,6 +31,7 @@
 
 .gallery-card>img:hover{
     transform: scale(1.025);
+    cursor: pointer;
 }
 
 .gallery-card-modal{

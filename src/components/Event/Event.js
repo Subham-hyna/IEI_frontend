@@ -1,18 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Event.css'
 import EventCard from './EventCard/EventCard'
 import { FormControl, InputLabel, MenuItem, Modal, Pagination, Select } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
+import { clearErrors, clearMessages, createEvent, deleteEvent, getEvents } from '../../redux/actions/eventAction'
+import {toast} from 'react-hot-toast'
+import { deleteEventReset, newEventReset } from '../../redux/reducers/eventReducer'
+import Loader from '../utils/Loader/Loader'
+import MetaData from '../Layout/MetaData'
 
-const Event = ({ role = "user"}) => {
+const Event = () => {
     const [status , setStatus] = useState("ALL");
-    const [keyword , setKeyword] = useState("");
+    const [search , setSearch] = useState("");
     const [page, setPage] = useState(1);
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const [title , setTitle] = useState();
     const [caption , setcaption] = useState();
     const [link , setLink] = useState();
     const [date , setDate] = useState();
     const [addStatus , setAddStatus] = useState();
+    const [image, setImage] = useState("");
     
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -21,96 +29,88 @@ const Event = ({ role = "user"}) => {
         setPage(value);
     };
 
-    const handleSubmit = (e) => {
+    const newEventHandler = (e) => {
         e.preventDefault();
+
+        const formData = new FormData();
+
+        formData.append("title",title);
+        formData.append("caption",caption);
+        formData.append("link",link);
+        formData.append("status",addStatus);
+        formData.append("date",date);
+        formData.append("photo",image);
+    
+        dispatch(createEvent(formData));
     }
 
-    const resultPerPage = 9;
-    const activitesFilteredCount = 15;
-    const events = [
-        {
-            "image": {
-                "public_id": "imageID",
-                "url": "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1703942853/WhatsApp_Image_2023-12-30_at_18.56.02_kfcxrt.jpg"
-            },
-            "_id": "6590109a1adb1bf83308bd9a",
-            "title": "Web Hackathon",
-            "caption": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-            "link": "https://youtube.com",
-            "status": "ongoing",
-            "date": "17 Sept 2023",
-            "photos": [],
-            "createdAt": "2023-12-30T12:44:10.587Z",
-            "updatedAt": "2023-12-30T12:44:10.587Z",
-            "__v": 0
-        },
-        {
-            "image": {
-                "public_id": "imageID",
-                "url": "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1703942862/WhatsApp_Image_2023-10-24_at_08.22.30_k3owjx.jpg"
-            },
-            "_id": "659010881adb1bf83308bd97",
-            "title": "Cyber Security Workshop",
-            "caption": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-            "link": "https://youtube.com",
-            "status": "ongoing",
-            "date": "17 Sept 2023",
-            "photos": [],
-            "createdAt": "2023-12-30T12:43:52.407Z",
-            "updatedAt": "2023-12-30T12:43:52.407Z",
-            "__v": 0
-        },
-        {
-            "image": {
-                "public_id": "imageID",
-                "url": "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1703942853/WhatsApp_Image_2023-12-30_at_18.56.02_kfcxrt.jpg"
-            },
-            "_id": "6590106e1adb1bf83308bd94",
-            "title": "Arduino Workshop",
-            "caption": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-            "link": "https://youtube.com",
-            "status": "past",
-            "date": "17 july 2023",
-            "photos": [],
-            "createdAt": "2023-12-30T12:43:26.840Z",
-            "updatedAt": "2023-12-30T12:43:26.840Z",
-            "__v": 0
-        },
-        {
-            "image": {
-                "public_id": "imageID",
-                "url": "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1703942862/WhatsApp_Image_2023-10-24_at_08.22.30_k3owjx.jpg"
-            },
-            "_id": "659010691adb1bf83308bd91",
-            "title": "Arduino Workshop",
-            "caption": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-            "link": "https://youtube.com",
-            "status": "upcoming",
-            "date": "17 july 2023",
-            "photos": [],
-            "createdAt": "2023-12-30T12:43:21.104Z",
-            "updatedAt": "2023-12-30T12:43:21.104Z",
-            "__v": 0
-        },
-        {
-            "image": {
-                "public_id": "imageID",
-                "url": "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1703942853/WhatsApp_Image_2023-12-30_at_18.56.02_kfcxrt.jpg"
-            },
-            "_id": "6590105f1adb1bf83308bd8e",
-            "title": "Hackathon",
-            "caption": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-            "link": "https://youtube.com",
-            "status": "upcoming",
-            "date": "17 july 2023",
-            "photos": [],
-            "createdAt": "2023-12-30T12:43:11.823Z",
-            "updatedAt": "2023-12-30T12:43:11.823Z",
-            "__v": 0
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const {
+        events,
+        loading,
+        error,
+        resultPerPage,
+        eventsFilteredCount,
+        message,
+        isDeleted,
+        isCreated,
+        buttonLoading
+    } = useSelector((state) => state.event);
+    const { user } = useSelector((state)=>state.user);
+
+    const handleSearch = () => {
+        if(search.length > 0){
+          navigate(`/events/${search.trim()}`)
         }
-    ];
+        else{
+          navigate("/events")
+        }
+      }
+    
+      const deleteHandler = (id) => {
+        dispatch(deleteEvent(id));
+      }
+    
+      const { keyword } = useParams();
+    
+      useEffect(()=>{
+        status === "ALL" ? dispatch(getEvents(keyword,page,"")) : dispatch(getEvents(keyword,page,status));
+      },[dispatch,page,keyword,status])
+    
+      useEffect(()=>{
+        if(error){
+          toast.error(error);
+          dispatch(clearErrors());
+        }
+    
+        if(isDeleted){
+          toast.success(message);
+          navigate("/events");
+          status === "ALL" ? dispatch(getEvents(keyword,page,"")) : dispatch(getEvents(keyword,page,status));
+          dispatch(deleteEventReset());
+          dispatch(clearMessages());
+        }
+
+        if(isCreated){
+          toast.success(message);
+          navigate("/events");
+          handleClose();
+          status === "ALL" ? dispatch(getEvents(keyword,page,"")) : dispatch(getEvents(keyword,page,status));
+          dispatch(newEventReset());
+          dispatch(clearMessages());
+        }
+        
+      },[dispatch,error,isDeleted,message,navigate,keyword,page,status,isCreated])
+
   return (
+    <>
+    {loading ?
+    <Loader />
+    :
     <div className='event'>
+        <MetaData title={`${status.toUpperCase()} EVENTS`} />
         <div className='event-upper'>
             <h1>Innovate, Learn, Create Together</h1>
             <div>
@@ -129,21 +129,21 @@ const Event = ({ role = "user"}) => {
                  </Select>
                 </FormControl>
             </div>
-            <span>
+            <form onSubmit={handleSearch}>
                  <input
                      type="text"
-                     value={keyword}
+                     value={search}
                      placeholder="Search for Events"
-                     onChange={(e) => setKeyword(e.target.value)}
+                     onChange={(e) => setSearch(e.target.value)}
                  />
-                 <button>Go</button>
-             </span>
-             { role === "admin" &&<button onClick={handleOpen}>Add Member</button>}
+                 <button type='submit' >Go</button>
+             </form>
+             { user&&user.role === "admin" &&<button onClick={handleOpen}>Add Event</button>}
         <Modal
         open={open}
         onClose={handleClose}
       >
-        <form className='add-member' onSubmit={handleSubmit}>
+        <form className='add-member'>
       <div>
       <label>Title</label>
       <div>
@@ -182,11 +182,13 @@ const Event = ({ role = "user"}) => {
       <div>
       <label>Choose Poster Image</label>
       <div>
-          <input type='file' />
+          <input type='file'
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])} />
       </div>
       </div>
       <div>
-          <input type='submit' value="Add" />
+          <button type='submit' onClick={newEventHandler} >{buttonLoading ? <div className='button-loader'></div> : "ADD"}</button>
       </div>
     </form>
       </Modal>
@@ -196,15 +198,15 @@ const Event = ({ role = "user"}) => {
             <div>
                 {events.length > 0 ? 
                 events.map((event)=>(
-                    <EventCard event={event} key={event._id}/>
+                    <EventCard event={event} key={event._id} status={status} deleteHandler={()=>deleteHandler(event._id)} />
                 ))    
                 :
                 <p>No Events Found!!</p>
             }
             </div>
-            {activitesFilteredCount > resultPerPage && (
+            {eventsFilteredCount > resultPerPage && (
           <Pagination
-            count={Math.ceil(activitesFilteredCount / resultPerPage)}
+            count={Math.ceil(eventsFilteredCount / resultPerPage)}
             page={page}
             onChange={onPageChange}
             color="secondary"
@@ -213,6 +215,8 @@ const Event = ({ role = "user"}) => {
         )}
         </div>
     </div>
+    }
+    </>
   )
 }
 

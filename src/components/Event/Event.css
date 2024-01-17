@@ -18,7 +18,7 @@
     align-items: center;
 }
 
-.event-upper:before {    
+.event-upper::before {    
     content: "";
     background: url('../../assets/eventbg.jpeg');
     object-fit: contain;
@@ -59,7 +59,7 @@
     right: 26px;
 }
 
-.event-upper>span {
+.event-upper>form {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -71,7 +71,7 @@
     position: relative;
 }
 
-.event-upper>span>input[type=text] {
+.event-upper>form>input[type=text] {
   background-color: #ffffffbd;
   border: none;
   color: black;
@@ -84,7 +84,7 @@
   padding: 0 10px;
 }
 
-.event-upper>span>button {
+.event-upper>form>button {
     background-color: #5f3fd7bd;
     border: none;
     color: whitesmoke;
@@ -97,7 +97,7 @@
     padding: 10px 10px;
 }
 
-.event-upper>span>button:hover{
+.event-upper>form>button:hover{
     cursor: pointer;
     background-color: rgb(102, 41, 225);
 }
@@ -172,10 +172,10 @@
     .event-upper>h1{
         font-size: 35px;
     }
-    .event-upper>span>input[type=text] {
+    .event-upper>form>input[type=text] {
         width: 28vw;
     }
-    .event-upper>span>button{
+    .event-upper>form>button{
         width: 6vw;
     }
 }
@@ -187,10 +187,10 @@
     .event-upper>h1{
         font-size: 27px;
     }
-    .event-upper>span>input[type=text] {
+    .event-upper>form>input[type=text] {
         width: 44vw;
     }
-    .event-upper>span>button{
+    .event-upper>form>button{
         width: 11vw;
     }
     .event-lower>h1{
@@ -209,14 +209,14 @@
         font-size: 25px;
         text-align: center;
     }
-    .event-upper>span>{
+    .event-upper>form{
         padding: 2px 16px;
     }
-    .event-upper>span>input[type=text] {
+    .event-upper>form>input[type=text] {
         width: 45vw;
         font-size: 14px;
     }
-    .event-upper>span>button{
+    .event-upper>form>button{
         width: 16vw;
     }
     .event-lower>h1{

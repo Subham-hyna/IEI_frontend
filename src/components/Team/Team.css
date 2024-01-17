@@ -110,6 +110,11 @@
     flex-wrap: wrap;
 }
 
+.t-lower>div>div>p{
+    font-size: 22px;
+    font-family: "Roboto" , sans-serif;
+}
+
 .t-lower>div>span::after{
     content: '';
     position: absolute;
@@ -217,19 +222,25 @@
     border-radius: 5px;
     padding: 10px 10px;
 }
-.add-member>div>input[type=submit] {
-    background-color: #54299ebd;
-    border: none;
-    color: whitesmoke;
-    font-size: 16px;
-    font-weight: 400;
-    outline: none;
-    height: 36px;
-    width: 100%;
+.add-member>div>button {
+    background: #7f51c2;
+    color: white;
+    padding: 11px;
+    font-size: 14px;
     border-radius: 5px;
-    padding: 10px 10px;
+    font-weight: 500;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    cursor: pointer;
+    font-family: "Roboto" , sans-serif;
+    border: none;
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.add-member>div>input[type=submit]:hover{
+.add-member>div>button:hover{
     background-color: #25195c;
     cursor: pointer;
 }

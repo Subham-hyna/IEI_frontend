@@ -46,9 +46,15 @@
     font-family: 'Roboto' ,sans-serif;
 }
 
-.event-card>div>p {
+.event-card>div>textarea {
     font-size: 16px;
     color: grey;
+    background: transparent;
+    outline: none;
+    border: none;
+    resize: none;
+    line-height: 1.4;
+    height: 69px;
 }
 
 .event-card>div>a {

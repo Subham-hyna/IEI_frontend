@@ -30,7 +30,7 @@
     font-weight: 500;
 }
 
-.gallery>div {
+.gallery>form {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -39,10 +39,9 @@
     border-radius: 50px;
     margin: 69px 0 10px 0;
     padding: 7px 21px;
-    position: relative;
 }
 
-.gallery>div>input[type=text] {
+.gallery>form>input[type=text] {
   background-color: #ffffffbd;
   border: none;
   color: black;
@@ -55,7 +54,7 @@
   padding: 0 10px;
 }
 
-.gallery>div>button {
+.gallery>form>button {
     background-color: #5f3fd7bd;
     border: none;
     color: whitesmoke;
@@ -68,13 +67,11 @@
     padding: 10px 10px;
 }
 
-.gallery>div>i>button{
+.gallery>i>button{
     background-color: #d2154abd;
     border: none;
-    position: absolute;
-    top: -43px;
-    left: 23%;
     color: whitesmoke;
+    cursor: pointer;
     font-size: 16px;
     font-weight: 500;
     outline: none;
@@ -84,11 +81,11 @@
     padding: 10px 10px;
 }
 
-.gallery>div>i>button:hover{
+.gallery>i>button:hover{
     background-color: #da1717;
 }
 
-.gallery>div>button:hover{
+.gallery>form>button:hover{
     cursor: pointer;
     background-color: rgb(102, 41, 225);
 }
@@ -114,13 +111,13 @@
     .gallery>p{
         font-size: 14px;
     }
-    .gallery>div{
+    .gallery>form{
         margin-top: 35px;
     }
-    .gallery>div>input[type=text]{
+    .gallery>form>input[type=text]{
         width: 30vw;
     }
-    .gallery>div>button{
+    .gallery>form>button{
         width: 6vw;
     }
     .activities>div>img{
@@ -140,13 +137,13 @@
         font-size: 13px;
         text-align: center;
     }
-    .gallery>div{
+    .gallery>form{
         margin-top: 20px;
     }
-    .gallery>div>input[type=text]{
+    .gallery>form>input[type=text]{
         width: 38vw;
     }
-    .gallery>div>button{
+    .gallery>form>button{
         width: 11vw;
     }
 }
@@ -161,10 +158,10 @@
     .gallery>p{
         font-size: 12px;
     }
-    .gallery>div>input[type=text]{
+    .gallery>form>input[type=text]{
         width: 41vw;
     }
-    .gallery>div>button{
+    .gallery>form>button{
         width: 13vw;
     }
     .activities>div>img{

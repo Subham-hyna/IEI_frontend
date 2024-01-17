@@ -55,10 +55,10 @@ const Footer = () => {
             <div className="f-quick">
                 <span>USEFUL LINKS</span>
                 <ul>
+                    <li><Link to="/devteam" >Developer Team</Link></li>
                     <li><Link to="/me" >Your Account</Link></li>
                     <li><Link to="/gallery" >Gallery</Link></li>
                     <li><Link to="/team" >Our Team</Link></li>
-                    <li><Link to="/devteam" >Developer Team</Link></li>
                 </ul>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Team.css";
 import TeamCard from "./TeamCard/TeamCard";
 import InputLabel from '@mui/material/InputLabel';
@@ -7,8 +7,15 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Tilt from 'react-parallax-tilt'
 import { Modal } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Loader from "../utils/Loader/Loader";
+import { clearErrors, clearMessages, createMember, deleteTeam, getTeam } from "../../redux/actions/teamAction";
+import {toast} from "react-hot-toast";
+import { deleteTeamReset, newTeamReset } from "../../redux/reducers/teamReducer";
+import MetaData from "../Layout/MetaData";
 
-const Team = ({ role = "user"}) => {
+const Team = () => {
   const [year, setYear] = useState("23");
   const [open, setOpen] = useState(false);
   const [name , setName] = useState();
@@ -18,627 +25,85 @@ const Team = ({ role = "user"}) => {
   const [fblink , setFblink] = useState();
   const [instalink , setInsta] = useState();
   const [linkedInlink , setLinkedIn] = useState();
+  const [image, setImage] = useState("");
     
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = (e) => {
+  const newTeamHandler = (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append("name",name);
+    formData.append("post",post);
+    formData.append("year",memberYear);
+    formData.append("FY",fy);
+    formData.append("insta",instalink);
+    formData.append("facebook",fblink);
+    formData.append("linkedIn",linkedInlink);
+    formData.append("photo",image);
+
+    dispatch(createMember(formData));
+
   }
 
-  const fourthYears = [
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b2a383f298e102b07e66",
-      name: "Pranjal",
-      post: "President",
-      year: 4,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:00:35.579Z",
-      updatedAt: "2023-12-22T16:00:35.579Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b2e183f298e102b07e69",
-      name: "Rishishek",
-      post: "General Secretary",
-      year: 4,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:01:37.984Z",
-      updatedAt: "2023-12-22T16:01:37.984Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b2e183f298e102b07e69",
-      name: "Rishishek",
-      post: "General Secretary",
-      year: 4,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:01:37.984Z",
-      updatedAt: "2023-12-22T16:01:37.984Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b2e183f298e102b07e69",
-      name: "Rishishek",
-      post: "General Secretary",
-      year: 4,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:01:37.984Z",
-      updatedAt: "2023-12-22T16:01:37.984Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b2e183f298e102b07e69",
-      name: "Rishishek",
-      post: "General Secretary",
-      year: 4,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:01:37.984Z",
-      updatedAt: "2023-12-22T16:01:37.984Z",
-      __v: 0,
-    },
-  ];
-  const thirdYears = [
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Subham Dutta",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Subham Dutta",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Subham Dutta",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Subham Dutta",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Gyan Sanatan Hazarika",
-      post: "Assistant General Secretary",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Subham Dutta",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Subham Dutta",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Subham Dutta",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Subham Dutta",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Subham Dutta",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Subham Dutta",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Subham Dutta",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b22da9846b11aee92383",
-      name: "Subham Dutta",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:58:37.792Z",
-      updatedAt: "2023-12-22T15:58:37.792Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b24fa9846b11aee92386",
-      name: "Vikash Raj",
-      post: "Technical Head",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:59:11.104Z",
-      updatedAt: "2023-12-22T15:59:11.104Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b27ca9846b11aee92389",
-      name: "Shreya Goswami",
-      post: "Vice President",
-      year: 3,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T15:59:56.674Z",
-      updatedAt: "2023-12-22T15:59:56.674Z",
-      __v: 0,
-    },
-  ];
-  const secondYears = [
-    {
-      avatar: {
-        public_id: "imageID",
-        url :"https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b46583f298e102b07e6c",
-      name: "Bhargob",
-      post: "junior technical",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:08:05.185Z",
-      updatedAt: "2023-12-22T16:08:05.185Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b46c83f298e102b07e6f",
-      name: "sagar",
-      post: "junior technical",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:08:12.705Z",
-      updatedAt: "2023-12-22T16:08:12.705Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b4b683f298e102b07e72",
-      name: "vidhi",
-      post: "content team",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:09:26.052Z",
-      updatedAt: "2023-12-22T16:09:26.052Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b4b683f298e102b07e72",
-      name: "vidhi",
-      post: "content team",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:09:26.052Z",
-      updatedAt: "2023-12-22T16:09:26.052Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b4b683f298e102b07e72",
-      name: "vidhi",
-      post: "content team",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:09:26.052Z",
-      updatedAt: "2023-12-22T16:09:26.052Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b4b683f298e102b07e72",
-      name: "vidhi",
-      post: "content team",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:09:26.052Z",
-      updatedAt: "2023-12-22T16:09:26.052Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b4b683f298e102b07e72",
-      name: "vidhi",
-      post: "content team",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:09:26.052Z",
-      updatedAt: "2023-12-22T16:09:26.052Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b4b683f298e102b07e72",
-      name: "vidhi",
-      post: "content team",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:09:26.052Z",
-      updatedAt: "2023-12-22T16:09:26.052Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b4b683f298e102b07e72",
-      name: "vidhi",
-      post: "content team",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:09:26.052Z",
-      updatedAt: "2023-12-22T16:09:26.052Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b4b683f298e102b07e72",
-      name: "vidhi",
-      post: "content team",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:09:26.052Z",
-      updatedAt: "2023-12-22T16:09:26.052Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b4b683f298e102b07e72",
-      name: "vidhi",
-      post: "content team",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:09:26.052Z",
-      updatedAt: "2023-12-22T16:09:26.052Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b4b683f298e102b07e72",
-      name: "vidhi",
-      post: "content team",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:09:26.052Z",
-      updatedAt: "2023-12-22T16:09:26.052Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b4b683f298e102b07e72",
-      name: "vidhi",
-      post: "content team",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:09:26.052Z",
-      updatedAt: "2023-12-22T16:09:26.052Z",
-      __v: 0,
-    },
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "6585b4b683f298e102b07e72",
-      name: "vidhi",
-      post: "content team",
-      year: 2,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-22T16:09:26.052Z",
-      updatedAt: "2023-12-22T16:09:26.052Z",
-      __v: 0,
-    },
-  ];
-  const fic = [
-    {
-      avatar: {
-        public_id: "imageID",
-        url: "https://res.cloudinary.com/ddr1kuyb3/image/upload/v1704184396/aiony-haust-3TLl_97HNJo-unsplash_nolun5.jpg"
-      },
-      _id: "658d8c26cadb0205c5e39b66",
-      name: "Rajjev Dey",
-      post: "Faculty-in-Charge",
-      year: 5,
-      FY: 23,
-      insta: "https://www.youtube.com",
-      facebook: "https://www.youtube.com",
-      linkedIn: "https://www.youtube.com",
-      createdAt: "2023-12-28T14:54:30.653Z",
-      updatedAt: "2023-12-28T14:54:30.653Z",
-      __v: 0,
-    },
-  ];
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state)=>state.user);
+
+  const { loading, fourthYears, thirdYears, secondYears, fic, error, isDeleted, message, isCreated, buttonLoading } = useSelector(state=>state.team);
+
+  const deleteHandler = (id) => {
+    dispatch(deleteTeam(id));
+  }
+
+  useEffect(()=>{
+    dispatch(getTeam(year))
+  },[dispatch,year])
+
+  useEffect(()=>{
+    if(error){
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+
+    if(isDeleted){
+      toast.success(message);
+      navigate("/team");
+      dispatch(getTeam(year));
+      dispatch(deleteTeamReset());
+      dispatch(clearMessages());
+    }
+
+    if(isCreated){
+      toast.success(message);
+      navigate("/team");
+      handleClose();
+      dispatch(getTeam(year));
+      dispatch(newTeamReset());
+      dispatch(clearMessages());
+    }
+    
+  },[dispatch,error,isDeleted,message,navigate,year,isCreated])
+
+  const nextYear = parseInt(year)+1;
+
   return (
+    <>
+    {loading ? <Loader />
+    :
     <div className="team">
+      <MetaData title={`IEI TEAM - 20${year}-${nextYear}`} />
       <div className="t-upper">
         <span>Unity, Vision, Impact, Success</span>
-        { role === "admin" &&<button onClick={handleOpen}>Add Member</button>}
+        { user && user.role === "admin" &&<button onClick={handleOpen}>Add Member</button>}
         <Modal
         open={open}
         onClose={handleClose}
       >
-        <form className='add-member' onSubmit={handleSubmit}>
+        <form className='add-member'>
       <div>
       <label>Name</label>
       <div>
@@ -660,6 +125,7 @@ const Team = ({ role = "user"}) => {
             <option value="2" >2nd</option>
             <option value="3" >3rd</option>
             <option value="4" >4th</option>
+            <option value="5" >FIC</option>
           </select>
       </div>
       </div>
@@ -695,11 +161,14 @@ const Team = ({ role = "user"}) => {
       <div>
       <label>Choose Profile Photo</label>
       <div>
-          <input type='file' />
+          <input type='file' 
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
+          />
       </div>
       </div>
       <div>
-          <input type='submit' value="Add" />
+          <button type='submit' onClick={newTeamHandler} >{buttonLoading ? <div className='button-loader'></div> : "ADD"}</button>
       </div>
     </form>
       </Modal>
@@ -722,41 +191,52 @@ const Team = ({ role = "user"}) => {
         <div>
           <span>Core Members</span>
           <div>
-          {fic.length > 0 &&
+          {fic.length > 0 ?
             fic.map((f) => (
-                <Tilt><TeamCard key={f._id} member={f} /></Tilt>
-            ))}
+                <Tilt><TeamCard key={f._id} member={f} deleteHandler={()=>deleteHandler(f._id)} /></Tilt>
+            ))
+            :
+            <p>No Members</p>}
           </div>
         </div>
         <div>
           <span>4th Year Members</span>
           <div>
-          {fourthYears.length > 0 &&
+          {fourthYears.length > 0 ?
             fourthYears.map((f) => (
-              <Tilt><TeamCard key={f._id} member={f} /></Tilt>
-            ))}
+              <Tilt><TeamCard key={f._id} member={f} deleteHandler={()=>deleteHandler(f._id)} /></Tilt>
+            ))
+          :
+          <p>No Members</p>
+          }
           </div>
         </div>
         <div>
           <span>3rd Year Members</span>
           <div>
-          {thirdYears.length > 0 &&
+          {thirdYears.length > 0 ?
             thirdYears.map((f) => (
-              <Tilt><TeamCard key={f._id} member={f} /></Tilt>
-            ))}
+              <Tilt><TeamCard key={f._id} member={f} deleteHandler={()=>deleteHandler(f._id)} /></Tilt>
+            ))
+            :
+            <p>No Members</p>}
           </div>
         </div>
         <div>
           <span>2nd Year Members</span>
           <div>
-          {secondYears.length > 0 &&
+          {secondYears.length > 0 ?
             secondYears.map((f) => (
-              <Tilt><TeamCard key={f._id} member={f} /></Tilt>
-            ))}
+              <Tilt><TeamCard key={f._id} member={f} deleteHandler={()=>deleteHandler(f._id)} /></Tilt>
+            ))
+            :
+            <p>No Members</p>}
           </div>
         </div>
       </div>
     </div>
+    }
+    </>
   );
 };
 

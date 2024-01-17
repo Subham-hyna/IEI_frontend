@@ -132,6 +132,9 @@
     font-family: "Roboto" , sans-serif;
     border: none;
     flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .profile-modal>button:hover{

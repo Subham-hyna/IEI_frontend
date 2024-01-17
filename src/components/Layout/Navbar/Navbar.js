@@ -8,7 +8,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import logo from '../../../assets/IEI_logo.svg'
 import Button from '@mui/material/Button';
 
-const Navbar = ({ isAuthenticated = false , name="Subham Dutta" , role="user"}) => {
+const Navbar = ({ isAuthenticated , user }) => {
 
     const[mobileMenu, setMobileMenu] = useState(false);
     
@@ -31,9 +31,9 @@ const Navbar = ({ isAuthenticated = false , name="Subham Dutta" , role="user"}) 
             </div>
             
             <div className='n-account'>
-                { role === "admin" && <Link to="/admin/mail" >Mail</Link>}
+                { user && user.role === "admin" && <Link to="/admin/mail" >Mail</Link>}
                 <Link to={ isAuthenticated ? "/me" : "/login"} >
-                    { isAuthenticated ? <Button variant="outlined" sx={{ border : "0" , color : "#6846f8"}} endIcon={<Avatar src={logo}/>}>{name.split(' ')[0]}</Button> : <Button variant="contained" sx={{ backgroundColor : "#8269ec" }} disableElevation endIcon={<LoginIcon />}>Login</Button> }
+                    { isAuthenticated ? <Button variant="outlined" sx={{ border : "0" , color : "#6846f8"}} endIcon={<Avatar src={user && user.avatar.url}/>}>{user&&user.name.split(" ")[0]}</Button> : <Button variant="contained" sx={{ backgroundColor : "#8269ec" }} disableElevation endIcon={<LoginIcon />}>Login</Button> }
                 </Link>
             <div className='n-bars'><MenuIcon onClick={()=>{setMobileMenu(true)}} /></div>
             </div>

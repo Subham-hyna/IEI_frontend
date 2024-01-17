@@ -1,18 +1,79 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './EventCard.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Modal } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+import { addEventPhoto, clearErrors, getEvents, updateEvent, updateEventPoster } from '../../../redux/actions/eventAction';
+import { addEventPhotoReset, updateEventReset } from '../../../redux/reducers/eventReducer';
 
-const EventCard = ({event , role="user"}) => {
+const EventCard = ({event,  status, deleteHandler}) => {
     const [open, setOpen] = React.useState(false);
-    const [title , setTitle] = useState();
-    const [caption , setcaption] = useState("");
-    const [link , setLink] = useState();
-    const [date , setDate] = useState();
-    const [addStatus , setAddStatus] = useState();
+    const [title , setTitle] = useState(event.title);
+    const [caption , setcaption] = useState(event.caption);
+    const [link , setLink] = useState(event.link);
+    const [date , setDate] = useState(event.date);
+    const [addStatus , setAddStatus] = useState(event.status);
+    const [poster, setPoster] = useState("")
+    const [photo, setPhoto] = useState("")
     
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const { user } = useSelector((state)=>state.user);
+    const { buttonLoading, isUpdated, error, isCreated } = useSelector((state)=>state.event);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const updatePosterHandler = (id) => {
+      
+      const formData = new FormData();
+  
+      formData.append("photo",poster);
+  
+      dispatch(updateEventPoster(formData,id));
+    }
+
+    const addPhotoHandler = (id) => {
+      
+      const formData = new FormData();
+  
+      formData.append("photo",photo);
+  
+      dispatch(addEventPhoto(formData,id));
+    }
+
+    const updateHandler = (id) => {
+    
+      const formData = new FormData();
+  
+      formData.append("title",title);
+      formData.append("caption",caption);
+      formData.append("link",link);
+      formData.append("status",addStatus);
+      formData.append("date",date);
+  
+      dispatch(updateEvent(formData,id));
+    }
+
+    useEffect(() => {
+
+      if(error){
+        toast.error(error);
+        dispatch(clearErrors());
+      }
+
+    if(isUpdated){
+      handleClose();
+      status === "ALL" ? dispatch(getEvents("",1,"")) : dispatch(getEvents("",1,status));
+      dispatch(updateEventReset());
+    }
+    if(isCreated){
+      handleClose();
+      status === "ALL" ? dispatch(getEvents("",1,"")) : dispatch(getEvents("",1,status));
+      dispatch(addEventPhotoReset());
+    }
+    }, [dispatch,isUpdated,error,navigate,status,isCreated])
 
   return (
     <div className='event-card'>
@@ -23,10 +84,10 @@ const EventCard = ({event , role="user"}) => {
             {event.status !== "past" && <h3 className='blink'>{event.status.toUpperCase()}</h3>}
             <h1>{event.title}</h1>
             <h2>{event.date}</h2>
-            <p>{event.caption.substr(0,200)}...</p>
+            <textarea>{event.caption.substr(0,150)+"..."}</textarea>
             <Link to = {`/event/${event._id}`}>Click here to view more</Link>
         </div>
-        { role === "admin" && <span>
+        { user&&user.role === "admin" && <span>
             <button onClick={handleOpen}>Edit</button>
             <Modal
         open={open}
@@ -37,14 +98,14 @@ const EventCard = ({event , role="user"}) => {
       <label>Title</label>
       <div>
           <input type='text' value={title} placeholder='Enter Event Title' onChange={(e)=>(setTitle(e.target.value))}/>
-          <button>update</button>
+          <button onClick={()=>updateHandler(event._id)} >{buttonLoading ? <div className='button-loader'></div> : "Update"}</button>
       </div>
       </div>
       <div>
       <label>Caption</label>
       <div>
           <textarea value={caption} placeholder='Enter Event Caption' onChange={(e)=>(setcaption(e.target.value))}>{caption}</textarea>
-          <button>update</button>
+          <button onClick={()=>updateHandler(event._id)} >{buttonLoading ? <div className='button-loader'></div> : "Update"}</button>
       </div>
       </div>
       <div>
@@ -56,40 +117,44 @@ const EventCard = ({event , role="user"}) => {
             <option value="ongoing" >ONGOING </option>
             <option value="past" >PAST</option>
           </select>
-          <button>update</button>
+          <button onClick={()=>updateHandler(event._id)} >{buttonLoading ? <div className='button-loader'></div> : "Update"}</button>
       </div>
       </div>
       <div>
       <label>Last Date to apply</label>
       <div>
           <input type='text' value={date} placeholder='Enter Last Date to apply' onChange={(e)=>(setDate(e.target.value))}/>
-          <button>update</button>
+          <button onClick={()=>updateHandler(event._id)} >{buttonLoading ? <div className='button-loader'></div> : "Update"}</button>
       </div>
       </div>
       <div>
       <label>Registration Link</label>
       <div>
           <input type='text' value={link} placeholder='Enter Registration link' onChange={(e)=>(setLink(e.target.value))}/>
-          <button>update</button>
+          <button onClick={()=>updateHandler(event._id)} >{buttonLoading ? <div className='button-loader'></div> : "Update"}</button>
       </div>
       </div>
       <div>
       <label>Choose Poster Image</label>
       <div>
-          <input type='file' />
-          <button>update</button>
+          <input type='file'
+            accept="image/*"
+            onChange={(e) => setPoster(e.target.files[0])} />
+          <button onClick={()=>updatePosterHandler(event._id)} >{buttonLoading ? <div className='button-loader'></div> : "Update"}</button>
       </div>
       </div>
       <div>
       <label>Add Event Photo</label>
       <div>
-          <input type='file' />
-          <button>Add</button>
+          <input type='file'  
+          accept="image/*"
+          onChange={(e) => setPhoto(e.target.files[0])} />
+          <button onClick={()=>addPhotoHandler(event._id)} >{buttonLoading ? <div className='button-loader'></div> : "Update"}</button>
       </div>
       </div>
     </div>
       </Modal>
-            <button>Delete</button>
+            <button onClick={deleteHandler}>Delete</button>
             </span>}
     </div>
   )

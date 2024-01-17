@@ -51,6 +51,9 @@
     font-family: "Roboto" , sans-serif;
     border: none;
     flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .edit-profile>div>div>button:hover{

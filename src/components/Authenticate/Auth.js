@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Auth.css'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearErrors, login, signup } from '../../redux/actions/userAction';
+import { toast } from 'react-hot-toast';
+import MetaData from '../Layout/MetaData';
 
 const Auth = () => {
     const [signinEmail , setSigninEmail] = useState("");
@@ -15,14 +19,64 @@ const Auth = () => {
     const [signupPassword, setSignupPassword] = useState();
     const [signupConfirmPassword , setSignupConfirmPassword] = useState();
     const [showSignupPassword, setShowSignupPassword] = useState();
+    const [avatar, setAvatar] = useState("");
     
     const [showSignup , setShowSignUp] = useState(false);
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { user,error,isAuthenticated,loading } = useSelector((state)=>state.user)
+
+    const signupHandler = (e) => {
+        e.preventDefault();
+
+        if(signupPassword !== signupConfirmPassword){
+            toast.error("Password Mismatched");
+            return;
+        }
+
+        const formData = new FormData();
+
+        formData.append("name",signupName);
+        formData.append("email",signupEmail);
+        formData.append("phone",signupPhone);
+        formData.append("password",signupPassword);
+        formData.append("photo",avatar);
+        dispatch(signup(formData));
+
+    }
+    const loginHandler = (e) => {
+        e.preventDefault();
+        dispatch(login(signinEmail,signinPassword));
+
+    }
+    
+    useEffect(()=>{
+        if(isAuthenticated){
+            navigate("/");
+        }
+        
+    }
+    ,[isAuthenticated,navigate])
+    useEffect(()=>{
+        if(error){
+            toast.error(error);
+            dispatch(clearErrors());
+        }
+        if(isAuthenticated){
+            navigate("/");
+        }
+        
+    }
+    ,[dispatch,error,isAuthenticated,loading,user,navigate])
+
+
   return (
     <div className='auth-main'>
+        <MetaData title={showSignup ? "SIGNUP" : "LOGIN"} />
         <div className={showSignup ? "active container" : "container"} id="container">
         <div className="form-container sign-up">
-            <form>
+            <form onSubmit={signupHandler}>
                 <h1>Create Account</h1>
                 <div>
             <label>Name</label>
@@ -54,21 +108,24 @@ const Auth = () => {
         </div>
         <div>
             <label>Upload Profile Photo</label>
-            <input type='file'/>
+            <input type='file'
+            accept="image/*"
+            onChange={(e) => setAvatar(e.target.files[0])}
+            />
         </div>
-                <button>Sign Up</button>
+                <button type='submit'>{loading ? <div className='button-loader'></div> : "Sign Up"}</button>
                 <Link onClick={()=>{setShowSignUp(false)}}>Already Registered! Login Here</Link>
             </form>
         </div>
         <div className="form-container sign-in">
-            <form>
+            <form onSubmit={loginHandler}>
                 <h1>Sign In</h1>
                 <div>
             <label>Email</label>
             <input type='email' placeholder='Email'  value={signinEmail} onChange={(e)=>{setSigninEmail(e.target.value)}}/>
         </div>
                 <div>
-          <label>New Password</label>
+          <label>Password</label>
           <input type={showSigninPassword ? "text" : "password"} placeholder='Enter Your New Password' value={signinPassword} onChange={(e)=>{setSigninPassword(e.target.value)}} />
           <div
                 onClick={() => {
@@ -79,7 +136,7 @@ const Auth = () => {
          </div>
         </div>
             <Link to="/password/forgot">Forgot Password</Link>
-                <button>Sign In</button>
+                <button type='submit' >{loading ? <div className='button-loader'></div> : "Sign In"}</button>
             <Link onClick={()=>{setShowSignUp(true)}}>Not Yet Registered! Register Here</Link>
             </form>
         </div>
@@ -105,7 +162,7 @@ const Auth = () => {
         </span>
         {showSignup ? 
         <div >
-        <form>
+        <form onSubmit={signupHandler}>
             <h1>Create Account</h1>
             <div>
         <label>Name</label>
@@ -137,22 +194,25 @@ const Auth = () => {
     </div>
     <div>
         <label>Upload Profile Photo</label>
-        <input type='file'/>
+        <input type='file'
+        accept="image/*"
+        onChange={(e) => setAvatar(e.target.files[0])}
+        />
     </div>
-            <button>Sign Up</button>
+            <button type='submit'>{loading ? <div className='button-loader'></div> : "Sign Up"}</button>
             <Link onClick={()=>{setShowSignUp(!showSignup)}}>Already Registered! Login Here</Link>
         </form>
     </div>
         :
         <div>
-        <form>
+        <form onSubmit={loginHandler}>
             <h1>Sign In</h1>
             <div>
         <label>Email</label>
         <input type='email' placeholder='Email'  value={signinEmail} onChange={(e)=>{setSigninEmail(e.target.value)}}/>
     </div>
             <div>
-      <label>New Password</label>
+      <label>Password</label>
       <input type={showSigninPassword ? "text" : "password"} placeholder='Enter Your New Password' value={signinPassword} onChange={(e)=>{setSigninPassword(e.target.value)}} />
       <div
             onClick={() => {
@@ -163,7 +223,7 @@ const Auth = () => {
      </div>
     </div>
         <Link to="/password/forgot">Forgot Password</Link>
-            <button>Sign In</button>
+            <button type='submit'>{loading ? <div className='button-loader'></div> : "Sign In"}</button>
         <Link onClick={()=>{setShowSignUp(!showSignup)}}>Not Yet Registered! Register Here</Link>
         </form>
     </div>

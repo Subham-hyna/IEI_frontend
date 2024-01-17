@@ -89,6 +89,9 @@
     cursor: pointer;
     font-family: "Roboto" , sans-serif;
     border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .team-card>span>button:hover{
@@ -211,6 +214,9 @@
     font-family: "Roboto" , sans-serif;
     border: none;
     flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .edit-member>div>div>button:hover{
